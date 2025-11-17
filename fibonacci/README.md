@@ -14,18 +14,10 @@ Le **λ-calcul** est un système formel inventé dans les années 1930. Il repos
 Par exemple, les nombres y sont représentés sous forme de fonctions : un nombre *n* est une fonction qui applique une autre fonction **n fois** à une valeur (elle-même fonction).
 L’implémentation fournie est un fichier **JavaScript** utilisant des fonctions anonymes pour construire l’ensemble du programme.
 
-Pour éviter une récursion infinie, une technique d'évaluation différée est utilisée. Malgré cela, tenter de calculer le 24ᵉ terme ou plus de la séquence provoquera une erreur, due au trop grand nombre d’appels récursifs.
+De sa nature mathématique pure, cette méthode uniquement fonctionnelle n'est pas adaptée pour être rapide sur un ordinateur. À partir du 45e terme, la résolution peut prendre plus d'une minute, et chaque terme subséquent augmente la quantité d'opérations exponentiellement.
 
 La fonction finale présentée ci-dessous utilise les symboles propres au langage et constitue la vraie réponse #2 au défi. Le fichier JavaScript n’est fourni que pour permettre son exécution.
 
 ```
-λ n.(λ f.(λ x z.f (x x)) (λ x z.f (x x))) (λ f m.(λ p a b.p a b) ((λ n.n (λ x a b.b) (λ a b.a)) m)
-(λ x f x.f x) (λ x.(λ m n.m (λ x f a.f (x f a)) n) (f (λ x a b.a) ((λ n.n (λ g k.(λ n.n (λ x a b.b)
-(λ a b.a)) (g (λ f x.f x)) k ((λ m n.m (λ x f a.f (x f a)) n) (g k) (λ f x.f x))) (λ v a b.b) (λ a b.b)) m))
-(f (λ x a b.a) ((λ n.n (λ g k.(λ n.n (λ x a b.b) (λ a b.a)) (g (λ f x.f x)) k ((λ m n.m (λ x f a.f (x f a)) n)
-(g k) (λ f x.f x))) (λ v a b.b) (λ a b.b)) ((λ n.n (λ g k.(λ n.n (λ x a b.b) (λ a b.a)) (g (λ f x.f x)) k
-((λ m n.m (λ x f a.f (x f a)) n) (g k) (λ f x.f x))) (λ v a b.b) (λ a b.b)) m)))) (λ x a b.a)) (λ x a b.a)
-((λ n.n (λ g k.(λ n.n (λ x a b.b) (λ a b.a)) (g (λ f x.f x)) k ((λ m n.m (λ x f a.f (x f a)) n) (g k)
-(λ f x.f x))) (λ v a b.b) (λ a b.b)) ((λ n.n (λ g k.(λ n.n (λ x a b.b) (λ a b.a)) (g (λ f x.f x)) k
-((λ m n.m (λ x f a.f (x f a)) n) (g k) (λ f x.f x))) (λ v a b.b) (λ a b.b)) n))
+λn.n (λp.λf.f (p (λa.λb.b)) (λf.λx.p (λa.λb.a) f (p (λa.λb.b) f x))) (λf.f (λa.λb.b) (λf.λx.f x)) (λa.λb.a)
 ```
