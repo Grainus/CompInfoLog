@@ -81,7 +81,13 @@
     int x = 10;
     int* p = &x;  // p contient l'adresse de x
 
+    cout << *p << endl;  // Affiche la valeur de x (10)
+
+    cout << p << endl;   // Affiche l'adresse de x (0xxxxxxxx)
+
     *p = 20;     // On modifie x via le pointeur
+
+    cout << x << endl;  // Affiche la nouvelle valeur de x (20)
                             </pre>
 
                             <p>
@@ -111,7 +117,11 @@
     int x = 10;
     int& r = x;   // r est une référence à x
 
+    cout << r << endl;   // Affiche la valeur de x (10)
+
     r = 30;       // On modifie directement x
+
+    cout << x << endl;   // Affiche la nouvelle valeur de x (30)
                             </pre>
 
                             <p>
