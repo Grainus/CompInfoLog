@@ -72,6 +72,7 @@
                             <p>
                                 Un pointeur est une variable qui contient l’adresse mémoire d’une autre variable.  
                                 Il doit être déréférencé (avec l'ajout de "<code>*</code>") pour accéder à la valeur.
+                                Il en va de soit que deux pointeurs peuvent pointer vers la même variable ou vers des variables différentes.
                             </p>
 
                             <h3>Exemple :</h3>
@@ -101,7 +102,7 @@
                             <p>
                                 Une référence est un alias donné à une variable existante, un nom alternatif (un surnom de cette dernière).  
                                 Elle n’est pas stockée comme une variable différente. Elle doit être initialisée
-                                dès sa création et ne peut pas changer de cible.
+                                dès sa création et ne peut pas changer de cible. C'est aussi possible d'avoir plusieurs références pointant vers la même variable.
                             </p>
 
                             <h3>Exemple :</h3>
@@ -158,6 +159,12 @@
                                 <td>Accès à la valeur</td>
                                 <td>Il faut déréférencer (<code>*p = nouvelle_valeur</code>)</td>
                                 <td>Directement (<code>r = nouvelle_valeur</code>)</td>
+                            </tr>
+
+                            <tr>
+                                <td>Unicité</td>
+                                <td>Non</td>
+                                <td>Non</td>
                             </tr>
 
                             <tr>
