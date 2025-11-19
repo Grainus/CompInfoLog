@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+        <title>Pointeur vs Référence en C++</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 40px;
+                line-height: 1.6;
+            }
+            h1, h2 {
+                color: #1d5fa7;
+            }
+            pre {
+                background: #f2f2f2;
+                padding: 0px;
+                border-radius: 5px;
+                max-width: 500px;
+                overflow-x: auto;
+                text-align: left;
+            }
+            .comparison {
+                border-collapse: collapse;
+                width: 100%;
+                margin: 20px 0;
+            }
+            .comparison th, .comparison td {
+                border: 1px solid #ccc;
+                padding: 10px;
+                text-align: left;
+            }
+            .comparison th {
+                background: #e4f1ff;
+                font-weight: bold;
+            }
+            .container1 {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                margin: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container1">
+            <div class="container-fluid">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <h1>Pointeur vs Référence en C++</h1>
+
+                            <p>
+                                Dans le langage C++, les pointeurs et les références permettent tous deux de 
+                                travailler sur des variables indirectement, mais leur fonctionnement et leur 
+                                utilisation sont différents. Voici une explication simple avec exemples.
+                            </p>
+
+                            <hr>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-fluid">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <h2>1. Le pointeur</h2>
+                            <p>
+                                Un pointeur est une variable qui contient l’adresse mémoire d’une autre variable.  
+                                Il doit être déréférencé (avec l'ajout de "<code>*</code>") pour accéder à la valeur.
+                            </p>
+
+                            <h3>Exemple :</h3>
+                            <pre>
+
+    int x = 10;
+    int* p = &x;  // p contient l'adresse de x
+
+    *p = 20;     // On modifie x via le pointeur
+                            </pre>
+
+                            <p>
+                                <strong>Après exécution, la variable x vaut 20.</strong>
+                            </p>
+
+                            <hr>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-fluid">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <h2>2. La référence</h2>
+                            <p>
+                                Une référence est un alias donné à une variable existante, un nom alternatif (un surnom de cette dernière).  
+                                Elle n’est pas stockée comme une variable différente. Elle doit être initialisée
+                                dès sa création et ne peut pas changer de cible.
+                            </p>
+
+                            <h3>Exemple :</h3>
+                            <pre>
+
+    int x = 10;
+    int& r = x;   // r est une référence à x
+
+    r = 30;       // On modifie directement x
+                            </pre>
+
+                            <p>
+                                <strong>Après exécution, la variable x vaut 30.</strong>
+                            </p>
+
+                            <hr>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+
+            <div class="container-fluid">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <h2>3. Tableau de comparaison</h2>
+
+                            <table class="comparison">
+                            <tr>
+                                <th>Critère</th>
+                                <th>Pointeur</th>
+                                <th>Référence</th>
+                            </tr>
+
+                            <tr>
+                                <td>Peut être nul</td>
+                                <td>Oui (ex: <code>nullptr</code>)</td>
+                                <td>Non</td>
+                            </tr>
+
+                            <tr>
+                                <td>Peut changer de cible</td>
+                                <td>Oui</td>
+                                <td>Non</td>
+                            </tr>
+
+                            <tr>
+                                <td>Déclaration</td>
+                                <td><code>int* p</code></td>
+                                <td><code>int& r</code></td>
+                            </tr>
+
+                            <tr>
+                                <td>Accès à la valeur</td>
+                                <td>Il faut déréférencer (<code>*p = nouvelle_valeur</code>)</td>
+                                <td>Directement (<code>r = nouvelle_valeur</code>)</td>
+                            </tr>
+
+                            <tr>
+                                <td>Représentation en mémoire</td>
+                                <td>Variable séparée contenant une adresse</td>
+                                <td>Alias de la variable d’origine</td>
+                            </tr>
+                            </table>
+
+                            <hr>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+
+            <div class="container-fluid">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <h2>4. Exemple complet : avant / après</h2>
+
+                            <h3>Avec pointeur :</h3>
+                            <pre>
+
+    int x = 5;
+    int* p = &x;
+    *p = 40;   // x devient 40
+                            </pre>
+
+                            <h3>Avec référence :</h3>
+                            <pre>
+
+    int x = 5;
+    int& r = x;
+    r = 40;    // x devient aussi 40
+                            </pre>
+
+                            <hr>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-fluid">
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <h2>Conclusion</h2>
+                            <p>
+                                En résumé :
+                            </p>
+                            <ul>
+                                <li>Le pointeur stocke une adresse et peut être nul ou changer de cible.</li>
+                                <li>La référence est un alias direct, toujours valide et permanent.</li>
+                                <li>Les deux permettent de modifier une variable indirectement.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
