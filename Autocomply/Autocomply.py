@@ -97,12 +97,13 @@ Aucun texte supplémentaire ni formatage Markdown ne doit être ajouté, seuleme
             result  = literal_eval(response.json()["result"])
             section = str(result["section"]) 
             section = section.title()
-            return section
         except:
             return secIdentify(img_path)
 
         if section == "Non Identifié":
             return secIdentify(img_path)
+        else:
+            return section
     
     
 
