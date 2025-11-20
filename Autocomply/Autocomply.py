@@ -51,7 +51,8 @@ def secIdentify(img_path: str) -> str:
 
     prompt = """
 Analyse cette image de page PDF. 
-Identifie le titre exact de cette section (majoritairement en en-tête) conformémant à cette liste : listSec = (
+Identifie le titre exact de cette section (majoritairement en en-tête) conformémant à cette liste : 
+listSec = (
         ("Articles & Amendments", "Statuts et Amendements"),
         ("By Laws", "Règlements"),
         ("Unanimous Shareholder Agreement", "Convention Unanime d'Actionnaires"),
@@ -63,13 +64,15 @@ Identifie le titre exact de cette section (majoritairement en en-tête) conform�
         ("Share Certificates", "Certificats d'Actions"),
         ("Ultimate Beneficial Owner Register", "Registre des Particuliers Ayant un Contrôle Important")
     )
-Pour chaque section, il y a des variations possibles en français et en anglais. Retourne uniquement le nom exact de la section trouvée en anglais si elle est ressemble à une de la liste de couple.
+Ne retourne qu’un objet JSON de la forme {"section": "Nom"}.
 
-Réponds STRICTEMENT en json : {"section": "Nom"}
+Si une section du document correspond à une des sections possibles (en français ou en anglais), retourne le nom exact de la section en anglais.
 
-Ne met PAS de directives markdown telles que "```json" ou autres.
-Le résultat doit passer par literal_eval de Python 3.13 donc si {"section": null}, retourne {"section": "non identifié"}.
-Le code sera lu selon ast.literal_eval donc respecte bien la syntaxe.
+Si aucune section ne correspond, retourne {"section": "non identifié"}.
+
+Le JSON doit être valide pour ast.literal_eval de Python 3.13.
+
+Aucun texte supplémentaire ni formatage Markdown ne doit être ajouté, seulement le JSON.
 """
     headers = {
         "Authorization": f"Bearer {API_KEY}",
@@ -89,20 +92,18 @@ Le code sera lu selon ast.literal_eval donc respecte bien la syntaxe.
     )
     
     if response.status_code == 200:
-        print(response.json())
-        result  = literal_eval(response.json()["result"]) if response.json()["result"] != '' else {"section": "non identifié"} 
-        section = str(result["section"]) 
-        section = section.replace("\n", "").strip()
-        section = section.replace("_", " ")
-        section = section.replace("-", " ")
-        section = section.replace("  ", " ")
-        section = section.title()
+        try:
+            print(response.json())
+            result  = literal_eval(response.json()["result"])
+            section = str(result["section"]) 
+            section = section.title()
+        except:
+            return secIdentify(img_path)
 
-        return section
-    
-    else:
-        print(f"Erreur: {response.status_code} - {response.text}")
-        return f"{None}"
+        if section == "Non Identifié":
+            return secIdentify(img_path)
+        else:
+            return section
     
     
 
@@ -171,6 +172,7 @@ def extract_sections(filepath) -> list[dict]:
             startpage = page
 
             page_sup = page
+
             while page_sup < nbre_pages and secIdentify(pdf_page_to_image(doc, page_sup)) == nom_section:
                 page_sup += 10
             
