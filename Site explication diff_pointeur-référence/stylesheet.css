@@ -1,0 +1,463 @@
+:root {
+    --bg-color: #0d1117;
+    --text-color: #c9d1d9;
+    --accent-color: #58a6ff;
+    --code-bg: #161b22;
+    --border-color: #30363d;
+
+    /* Highlight Colors */
+    --highlight-primary-bg: rgba(88, 166, 255, 0.2);
+    --highlight-primary-border: #58a6ff;
+    --highlight-secondary-bg: rgba(63, 185, 80, 0.2);
+    --highlight-secondary-border: #3fb950;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+}
+
+header {
+    text-align: center;
+    padding: 4rem 2rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #fff;
+}
+
+h2 {
+    font-size: 2rem;
+    margin: 4rem 0 2rem;
+    text-align: center;
+    color: #fff;
+}
+
+h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    color: var(--accent-color);
+}
+
+code {
+    font-family: 'JetBrains Mono', monospace;
+    background-color: rgba(110, 118, 129, 0.4);
+    padding: 0.2em 0.4em;
+    border-radius: 6px;
+    font-size: 85%;
+}
+
+pre code {
+    background-color: transparent;
+    padding: 0;
+    font-size: 1rem;
+    display: block;
+}
+
+/* Syntax Highlighting */
+.token-kw {
+    color: #ff7b72;
+}
+
+/* Keywords like int, return, mov, push */
+.token-func {
+    color: #d2a8ff;
+}
+
+/* Function names */
+.token-num {
+    color: #79c0ff;
+}
+
+/* Numbers */
+.token-str {
+    color: #a5d6ff;
+}
+
+/* Strings */
+.token-reg {
+    color: #79c0ff;
+}
+
+/* Registers like rax, rbp */
+
+/* Syntaxe Section Layout */
+.split-container {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.column {
+    flex: 1;
+    position: relative;
+}
+
+.sticky-wrapper {
+    position: sticky;
+    top: 20vh;
+    z-index: 10;
+}
+
+.code-container {
+    background-color: var(--code-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    position: relative;
+    transition: all 0.3s ease;
+    min-height: 200px;
+    /* Ensure space for tooltips */
+}
+
+.scroll-steps {
+    position: relative;
+    z-index: 5;
+    /* No top padding needed as steps are just triggers now */
+}
+
+.step {
+    min-height: 50vh;
+    /* Reduced height since we removed the text */
+    /* Invisible triggers */
+}
+
+/* Tooltips */
+.tooltip-container {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    padding-top: 1rem;
+    pointer-events: none;
+}
+
+.tooltip-msg {
+    background-color: rgba(13, 17, 23, 0.95);
+    border: 1px solid var(--accent-color);
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    text-align: center;
+
+    /* Animation setup */
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    position: absolute;
+    width: 100%;
+    top: 1rem;
+}
+
+.tooltip-msg.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Code Highlighting States */
+.token-decl,
+.token-addr,
+.token-val {
+    transition: background-color 0.3s, color 0.3s;
+    border-radius: 4px;
+    padding: 2px;
+}
+
+/* States */
+[data-state="decl"] .token-decl {
+    background-color: var(--highlight-primary-bg);
+    border-bottom: 2px solid var(--highlight-primary-border);
+    color: #fff;
+}
+
+/* Pointer specific */
+[data-state="assign"] .token-addr {
+    background-color: var(--highlight-secondary-bg);
+    border-bottom: 2px solid var(--highlight-secondary-border);
+    color: #fff;
+}
+
+/* Reference specific */
+[data-state="assign"] .token-val {
+    background-color: var(--highlight-secondary-bg);
+    border-bottom: 2px solid var(--highlight-secondary-border);
+    color: #fff;
+}
+
+/* Valeurs Section */
+#valeurs {
+    position: relative;
+    padding: 4rem 1rem;
+    background-color: var(--bg-color);
+    z-index: 2;
+}
+
+.intro-text {
+    margin-bottom: 3rem;
+    font-size: 1.2rem;
+    color: #8b949e;
+    text-align: center;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.memory-container {
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    margin-bottom: 4rem;
+}
+
+.memory-block {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: left;
+    min-width: 250px;
+}
+
+.var-list,
+.addr-list {
+    list-style: none;
+}
+
+.var-list li,
+.addr-list li {
+    margin-bottom: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.var-name {
+    color: #79c0ff;
+}
+
+.var-val {
+    color: #ff7b72;
+}
+
+.var-addr {
+    color: #d2a8ff;
+}
+
+.addr-id {
+    color: #d2a8ff;
+}
+
+.addr-val {
+    color: #ff7b72;
+}
+
+.addr-note {
+    color: #8b949e;
+    font-size: 0.8em;
+    font-style: italic;
+}
+
+/* Diving Effect Classes */
+/* body.diving-mode removed - styles moved to #diving-section */
+
+#diving-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #05101a;
+    /* Noise texture on top of gradient to dither banding */
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48ZmlsdGVyIGlkPSJnoiPjxmZVR1cmJ1bGVuY2UgdHlwZT0iZnJhY3RhbE5vaXNlIiBiYXNlRnJlcXVlbmN5PSIwLjY1IiBudW1PY3RhdmVzPSIzIiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI24pIiBvcGFjaXR5PSIwLjA1Ii8+PC9zdmc+'),
+        radial-gradient(circle at 50% 50%, rgba(20, 40, 60, 0.4) 0%, rgba(5, 10, 20, 0.8) 100%);
+    pointer-events: none;
+    z-index: 1;
+    animation: pulse-water 5s infinite alternate;
+}
+
+#diving-section {
+    height: 200vh;
+    position: relative;
+    /* Mask to fade top and bottom */
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+}
+
+.sticky-diving {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+@keyframes pulse-water {
+    0% {
+        opacity: 0.3;
+    }
+
+    100% {
+        opacity: 0.6;
+    }
+}
+
+.deeper-msg {
+    font-size: 3rem;
+    color: rgba(100, 200, 255, 0.6);
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    z-index: 5;
+    text-shadow: 0 0 20px rgba(88, 166, 255, 0.5);
+}
+
+body.diving-mode .deeper-msg {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+/* Assembleur Section */
+#assembleur {
+    padding: 4rem 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: var(--bg-color);
+    /* Ensure it covers the diving section if needed */
+    position: relative;
+    z-index: 20;
+}
+
+.asm-subsection {
+    margin-bottom: 6rem;
+}
+
+
+.sub-intro {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #8b949e;
+}
+
+.asm-comparison {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+
+.asm-block h4 {
+    color: var(--accent-color);
+    margin-bottom: 0.5rem;
+}
+
+.split-view {
+    display: flex;
+    gap: 1rem;
+    background-color: var(--code-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.code-pane {
+    flex: 1;
+    padding: 1rem;
+    overflow-x: auto;
+}
+
+.cpp-pane {
+    border-right: 1px solid var(--border-color);
+}
+
+.highlight {
+    background-color: var(--highlight-primary-bg);
+    border: 1px solid var(--highlight-primary-border);
+    border-radius: 4px;
+    display: inline-block;
+    /* width: 100%; */
+}
+
+.highlight-1 {
+    background-color: var(--highlight-primary-bg);
+    border: 1px solid var(--highlight-primary-border);
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.highlight-2 {
+    background-color: var(--highlight-secondary-bg);
+    border: 1px solid var(--highlight-secondary-border);
+    border-radius: 4px;
+    display: inline-block;
+}
+
+/* Differences Section */
+#differences {
+    padding: 4rem 1rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: var(--bg-color);
+    position: relative;
+    z-index: 20;
+}
+
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem auto;
+    background-color: var(--code-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.comparison-table thead {
+    background-color: rgba(88, 166, 255, 0.1);
+}
+
+.comparison-table th {
+    padding: 1rem;
+    text-align: left;
+    color: var(--accent-color);
+    font-weight: 600;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.comparison-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+.comparison-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.comparison-table tbody tr:hover {
+    background-color: rgba(88, 166, 255, 0.05);
+}
+
+.comparison-table td:first-child {
+    font-weight: 600;
+    color: #fff;
+}

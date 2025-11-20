@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pointeur vs Référence</title>
+    <link rel="stylesheet" href="stylesheet.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <header>
+        <h1>Pointeur vs Référence</h1>
+        <p>Comprendre la différence en profondeur</p>
+    </header>
+
+    <main>
+        <section id="syntaxe">
+            <h2>Syntaxe</h2>
+            <p class="intro-text">Commençons par observer comment fonctionne la syntaxe des pointeurs et des références.
+                Chacun opère en tant que relation à un espace mémoire, mais utilise des symboles différents.</p>
+
+            <div class="split-container">
+                <!-- Pointeur Column -->
+                <div class="column" id="pointer-column">
+                    <h3>Pointeur</h3>
+                    <div class="sticky-wrapper">
+                        <div class="code-container">
+                            <pre><code class="language-cpp"><span class="token-kw">int</span> <span class="token-func">main</span>(<span class="token-kw">int</span> argc, <span class="token-kw">char</span>* argv[]) {
+    <span class="token-kw">int</span> value = <span class="token-num">17</span>;
+
+    <span class="token-decl">int* ptr</span> = <span class="token-addr">&value</span>;
+}</code></pre>
+                            <div class="tooltip-container">
+                                <div class="tooltip-msg" data-for="decl">La variable <code>ptr</code> est de type
+                                    <code>pointeur vers int</code>
+                                </div>
+                                <div class="tooltip-msg" data-for="assign">La variable <code>ptr</code> est assignée la
+                                    valeur <code>addresse de value</code></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="scroll-steps">
+                        <div class="step" data-target="pointer" data-state="init"></div>
+                        <div class="step" data-target="pointer" data-state="decl"></div>
+                        <div class="step" data-target="pointer" data-state="assign"></div>
+                    </div>
+                </div>
+
+                <!-- Référence Column -->
+                <div class="column" id="reference-column">
+                    <h3>Référence</h3>
+                    <div class="sticky-wrapper">
+                        <div class="code-container">
+                            <pre><code class="language-cpp"><span class="token-kw">int</span> <span class="token-func">main</span>(<span class="token-kw">int</span> argc, <span class="token-kw">char</span>* argv[]) {
+    <span class="token-kw">int</span> value = <span class="token-num">17</span>;
+
+    <span class="token-decl">int& ref</span> = <span class="token-val">value</span>;
+}</code></pre>
+                            <div class="tooltip-container">
+                                <div class="tooltip-msg" data-for="decl">La variable <code>ref</code> sera un alias vers
+                                    un int</div>
+                                <div class="tooltip-msg" data-for="assign"><code>ref</code> est un alias vers la valeur
+                                    pointée par <code>value</code>.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="scroll-steps">
+                        <div class="step" data-target="reference" data-state="init"></div>
+                        <div class="step" data-target="reference" data-state="decl"></div>
+                        <div class="step" data-target="reference" data-state="assign"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="diving-section">
+            <div class="sticky-diving">
+                <div class="deeper-msg">
+                    <p>We need to go deeper...</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="assembleur">
+            <h2>Implémentation assembleur</h2>
+            <p class="intro-text">Pour être vraiment certain de connaître la différence entre pointeur et référence, on
+                peut regarder au code assembleur généré par chaque exemple pour le comparer.</p>
+
+            <!-- Variable Simple -->
+            <div class="asm-subsection">
+                <h3>Variable simple</h3>
+                <p class="sub-intro">Commençons par observer ce qui se passe sous le capot pour une simple variable dans
+                    la fonction main.</p>
+
+                <div class="asm-comparison">
+                    <div class="asm-block">
+                        <h4>Pointeur</h4>
+                        <div class="split-view">
+                            <div class="code-pane cpp-pane">
+                                <pre><code class="language-cpp"><span class="token-kw">int</span> <span class="token-func">main</span>(<span class="token-kw">int</span> argc, <span class="token-kw">char</span>* argv[]) {
+    <span class="token-kw">int</span> value = <span class="token-num">17</span>;
+    <span class="highlight"><span class="token-kw">int</span>* ptr = &value;</span>
+
+    <span class="token-kw">return</span> <span class="token-num">0</span>;
+}</code></pre>
+                            </div>
+                            <div class="code-pane asm-pane">
+                                <pre><code class="language-asm">main:
+        <span class="token-kw">push</span>    <span class="token-reg">rbp</span>
+        <span class="token-kw">mov</span>     <span class="token-reg">rbp</span>, <span class="token-reg">rsp</span>
+        <span class="token-kw">mov</span>     <span class="token-kw">DWORD PTR</span> [<span class="token-reg">rbp</span>-20], <span class="token-reg">edi</span>
+        <span class="token-kw">mov</span>     <span class="token-kw">QWORD PTR</span> [<span class="token-reg">rbp</span>-32], <span class="token-reg">rsi</span>
+        <span class="token-kw">mov</span>     <span class="token-kw">DWORD PTR</span> [<span class="token-reg">rbp</span>-12], 17
+        <span class="highlight"><span class="token-kw">lea</span>     <span class="token-reg">rax</span>, [<span class="token-reg">rbp</span>-12]</span>
+        <span class="highlight"><span class="token-kw">mov</span>     <span class="token-kw">QWORD PTR</span> [<span class="token-reg">rbp</span>-8], <span class="token-reg">rax</span></span>
+        <span class="token-kw">mov</span>     <span class="token-reg">eax</span>, 0
+        <span class="token-kw">pop</span>     <span class="token-reg">rbp</span>
+        <span class="token-kw">ret</span></code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="asm-block">
+                        <h4>Référence</h4>
+                        <div class="split-view">
+                            <div class="code-pane cpp-pane">
+                                <pre><code class="language-cpp"><span class="token-kw">int</span> <span class="token-func">main</span>(<span class="token-kw">int</span> argc, <span class="token-kw">char</span>* argv[]) {
+    <span class="token-kw">int</span> value = <span class="token-num">17</span>;
+    <span class="highlight"><span class="token-kw">int</span>& ref = value;</span>
+
+    <span class="token-kw">return</span> <span class="token-num">0</span>;
+}</code></pre>
+                            </div>
+                            <div class="code-pane asm-pane">
+                                <pre><code class="language-asm">main:
+        <span class="token-kw">push</span>    <span class="token-reg">rbp</span>
+        <span class="token-kw">mov</span>     <span class="token-reg">rbp</span>, <span class="token-reg">rsp</span>
+        <span class="token-kw">mov</span>     <span class="token-kw">DWORD PTR</span> [<span class="token-reg">rbp</span>-20], <span class="token-reg">edi</span>
+        <span class="token-kw">mov</span>     <span class="token-kw">QWORD PTR</span> [<span class="token-reg">rbp</span>-32], <span class="token-reg">rsi</span>
+        <span class="token-kw">mov</span>     <span class="token-kw">DWORD PTR</span> [<span class="token-reg">rbp</span>-12], 17
+        <span class="highlight"><span class="token-kw">lea</span>     <span class="token-reg">rax</span>, [<span class="token-reg">rbp</span>-12]</span>
+        <span class="highlight"><span class="token-kw">mov</span>     <span class="token-kw">QWORD PTR</span> [<span class="token-reg">rbp</span>-8], <span class="token-reg">rax</span></span>
+        <span class="token-kw">mov</span>     <span class="token-reg">eax</span>, 0
+        <span class="token-kw">pop</span>     <span class="token-reg">rbp</span>
+        <span class="token-kw">ret</span></code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Arguments de fonctions -->
+            <div class="asm-subsection">
+                <h3>Arguments de fonctions</h3>
+                <p class="sub-intro">On peut voir la même chose se produire quand on compare une fonction qui prend un
+                    pointeur et une fonction qui prend une référence:</p>
+
+                <div class="asm-comparison">
+                    <div class="asm-block">
+                        <h4>Pointeur</h4>
+                        <div class="split-view">
+                            <div class="code-pane cpp-pane">
+                                <pre><code class="language-cpp"><span class="token-kw">void</span> <span class="token-func">func</span>(<span class="highlight-1"><span class="token-kw">int</span>* ptr</span>) {
+    <span class="highlight-2">*ptr = <span class="token-num">17</span>;</span>
+
+    <span class="token-kw">return</span>;
+}</code></pre>
+                            </div>
+                            <div class="code-pane asm-pane">
+                                <pre><code class="language-asm">func(int*):
+        <span class="token-kw">push</span>    <span class="token-reg">rbp</span>
+        <span class="token-kw">mov</span>     <span class="token-reg">rbp</span>, <span class="token-reg">rsp</span>
+        <span class="highlight-1"><span class="token-kw">mov</span>     <span class="token-kw">QWORD PTR</span> [<span class="token-reg">rbp</span>-8], <span class="token-reg">rdi</span></span>
+        <span class="highlight-2"><span class="token-kw">mov</span>     <span class="token-reg">rax</span>, <span class="token-kw">QWORD PTR</span> [<span class="token-reg">rbp</span>-8]</span>
+        <span class="highlight-2"><span class="token-kw">mov</span>     <span class="token-kw">DWORD PTR</span> [<span class="token-reg">rax</span>], 17</span>
+        <span class="token-kw">nop</span>
+        <span class="token-kw">pop</span>     <span class="token-reg">rbp</span>
+        <span class="token-kw">ret</span></code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="asm-block">
+                        <h4>Référence</h4>
+                        <div class="split-view">
+                            <div class="code-pane cpp-pane">
+                                <pre><code class="language-cpp"><span class="token-kw">void</span> <span class="token-func">func</span>(<span class="highlight-1"><span class="token-kw">int</span>& ptr</span>) {
+    <span class="highlight-2">ptr = <span class="token-num">17</span>;</span>
+
+    <span class="token-kw">return</span>;
+}</code></pre>
+                            </div>
+                            <div class="code-pane asm-pane">
+                                <pre><code class="language-asm">func(int&):
+        <span class="token-kw">push</span>    <span class="token-reg">rbp</span>
+        <span class="token-kw">mov</span>     <span class="token-reg">rbp</span>, <span class="token-reg">rsp</span>
+        <span class="highlight-1"><span class="token-kw">mov</span>     <span class="token-kw">QWORD PTR</span> [<span class="token-reg">rbp</span>-8], <span class="token-reg">rdi</span></span>
+        <span class="highlight-2"><span class="token-kw">mov</span>     <span class="token-reg">rax</span>, <span class="token-kw">QWORD PTR</span> [<span class="token-reg">rbp</span>-8]</span>
+        <span class="highlight-2"><span class="token-kw">mov</span>     <span class="token-kw">DWORD PTR</span> [<span class="token-reg">rax</span>], 17</span>
+        <span class="token-kw">nop</span>
+        <span class="token-kw">pop</span>     <span class="token-reg">rbp</span>
+        <span class="token-kw">ret</span></code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Structs -->
+            <div class="asm-subsection">
+                <h3>Structs</h3>
+                <p class="sub-intro">Juste pour être certain, observons ce qui se passe lorsqu'on a un pointeur ou une
+                    référence vers un membre d'un struct.</p>
+
+                <div class="asm-comparison">
+                    <div class="asm-block">
+                        <h4>Pointeur</h4>
+                        <div class="split-view">
+                            <div class="code-pane cpp-pane">
+                                <pre><code class="language-cpp"><span class="token-kw">struct</span> <span class="token-func">Exemple</span> {
+    <span class="token-kw">int</span> value;
+};
+
+<span class="token-kw">int</span> <span class="token-func">main</span>(<span class="token-kw">int</span> argc, <span class="token-kw">char</span>* argv[]) {
+    Exemple ex = { <span class="token-num">17</span> };
+    <span class="highlight"><span class="token-kw">int</span>* ptr = &ex.value;</span>
+
+    <span class="token-kw">return</span> <span class="token-num">0</span>;
+}</code></pre>
+                            </div>
+                            <div class="code-pane asm-pane">
+                                <pre><code class="language-asm">main:
+        <span class="token-kw">push</span>    <span class="token-reg">rbp</span>
+        <span class="token-kw">mov</span>     <span class="token-reg">rbp</span>, <span class="token-reg">rsp</span>
+        <span class="token-kw">mov</span>     <span class="token-kw">DWORD PTR</span> [<span class="token-reg">rbp</span>-20], <span class="token-reg">edi</span>
+        <span class="token-kw">mov</span>     <span class="token-kw">QWORD PTR</span> [<span class="token-reg">rbp</span>-32], <span class="token-reg">rsi</span>
+        <span class="token-kw">mov</span>     <span class="token-kw">DWORD PTR</span> [<span class="token-reg">rbp</span>-12], 17
+        <span class="highlight"><span class="token-kw">lea</span>     <span class="token-reg">rax</span>, [<span class="token-reg">rbp</span>-12]</span>
+        <span class="highlight"><span class="token-kw">mov</span>     <span class="token-kw">QWORD PTR</span> [<span class="token-reg">rbp</span>-8], <span class="token-reg">rax</span></span>
+        <span class="token-kw">mov</span>     <span class="token-reg">eax</span>, 0
+        <span class="token-kw">pop</span>     <span class="token-reg">rbp</span>
+        <span class="token-kw">ret</span></code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="asm-block">
+                        <h4>Référence</h4>
+                        <div class="split-view">
+                            <div class="code-pane cpp-pane">
+                                <pre><code class="language-cpp"><span class="token-kw">struct</span> <span class="token-func">Exemple</span> {
+    <span class="token-kw">int</span> value;
+};
+
+<span class="token-kw">int</span> <span class="token-func">main</span>(<span class="token-kw">int</span> argc, <span class="token-kw">char</span>* argv[]) {
+    Exemple ex = { <span class="token-num">17</span> };
+    <span class="highlight"><span class="token-kw">int</span>& ref = ex.value;</span>
+
+    <span class="token-kw">return</span> <span class="token-num">0</span>;
+}</code></pre>
+                            </div>
+                            <div class="code-pane asm-pane">
+                                <pre><code class="language-asm">main:
+        <span class="token-kw">push</span>    <span class="token-reg">rbp</span>
+        <span class="token-kw">mov</span>     <span class="token-reg">rbp</span>, <span class="token-reg">rsp</span>
+        <span class="token-kw">mov</span>     <span class="token-kw">DWORD PTR</span> [<span class="token-reg">rbp</span>-20], <span class="token-reg">edi</span>
+        <span class="token-kw">mov</span>     <span class="token-kw">QWORD PTR</span> [<span class="token-reg">rbp</span>-32], <span class="token-reg">rsi</span>
+        <span class="token-kw">mov</span>     <span class="token-kw">DWORD PTR</span> [<span class="token-reg">rbp</span>-12], 17
+        <span class="highlight"><span class="token-kw">lea</span>     <span class="token-reg">rax</span>, [<span class="token-reg">rbp</span>-12]</span>
+        <span class="highlight"><span class="token-kw">mov</span>     <span class="token-kw">QWORD PTR</span> [<span class="token-reg">rbp</span>-8], <span class="token-reg">rax</span></span>
+        <span class="token-kw">mov</span>     <span class="token-reg">eax</span>, 0
+        <span class="token-kw">pop</span>     <span class="token-reg">rbp</span>
+        <span class="token-kw">ret</span></code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <section id="revelation">
+                <h2>Révélation</h2>
+                <p class="intro-text">Dans tous les cas, les deux codes produisent exactement les mêmes instructions
+                    assembleur. Il n'y aurait donc aucune différence aux yeux de la machine?</p>
+                <p class="intro-text">En effet, la différence entre un pointeur et une référence existe seulement avant
+                    que le programme soit compilé. À l'interne, une référence est traitée comme un pointeur normal, et
+                    le compilateur C++ ajoutera automatiquement les opérations de déréférence lorsqu'on utilise la
+                    variable. Cela ne veut pas dire que les deux sont identiques dans leur usage.</p>
+            </section>
+
+            <section id="differences">
+                <h2>Différences</h2>
+                <p class="intro-text">Bien qu'ils soient identiques après compilation, le langage C++ impose des règles
+                    différentes pour leur utilisation:</p>
+
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Caractéristique</th>
+                            <th>Pointeur</th>
+                            <th>Référence</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Nullabilité</td>
+                            <td>Peut être nul (<code>nullptr</code>)</td>
+                            <td>Doit toujours être valide</td>
+                        </tr>
+                        <tr>
+                            <td>Réassignation</td>
+                            <td>Peut être réassigné</td>
+                            <td>Liée à vie à sa variable</td>
+                        </tr>
+                        <tr>
+                            <td>Initialisation</td>
+                            <td>Peut être non-initialisé</td>
+                            <td>Doit être initialisée</td>
+                        </tr>
+                        <tr>
+                            <td>Arithmétique</td>
+                            <td>Supporte l'arithmétique</td>
+                            <td>Pas d'arithmétique directe</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
